@@ -1,4 +1,4 @@
-title: Stackbit Fresh Theme
+title: Folger's
 baseurl: /
 permalink: '/:title/'
 collections:
@@ -7,9 +7,9 @@ collections:
 layout_style: overflow
 palette: blue
 header:
-  title: Stackbit Fresh
-  tagline: Header Tagline
-  profile_img: images/avatar.png
+  title: Folger's Blog
+  tagline: Blog
+  profile_img: images/profile.jpg
   bg: dark
   has_nav: true
   has_social: true
