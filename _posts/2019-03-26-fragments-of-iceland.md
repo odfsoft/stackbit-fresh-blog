@@ -1,21 +1,109 @@
 ---
-title: Fragments of Iceland
-excerpt: >-
-  Iceland is a Nordic country between the North Atlantic and the Arctic Ocean.
-  It has a population of 325,671 and an area of 103,000 km2 (40,000 sq mi),
-  making it the most sparsely populated country in Europe.
-date: '2019-03-27'
-thumb_img_path: images/7.jpg
-content_img_path: images/7.jpg
 layout: post
+title: SpringBoot application with Github Actions
+excerpt: >-
+  Create a SpringBoot application and publish it
+  as a docker container to docker hub using Github actions
+date: '2019-10-11'
+categories: [ SpringBoot, tutorial, Docker, Github Actions ]
+tags: [SpringBoot, Kotlin, Github Actions]
+thumb_img_path: images/spring-boot.png
+content_img_path: images/spring-boot.png
 ---
 
-Photo by [Anders Jildén](https://unsplash.com/photos/uO4Au3LrCtk)
+## SpringBoot application with Github Actions
 
-**Iceland** Enim nec dui nunc mattis enim ut tellus elementum sagittis. *Felis bibendum ut tristique et egestas quis ipsum suspendisse*. Est pellentesque elit ullamcorper dignissim cras tincidunt lobortis. Orci ac auctor augue mauris. Ut pharetra sit amet aliquam id diam. Lectus arcu bibendum at varius vel pharetra. Id nibh tortor id aliquet lectus proin nibh. Duis ut diam quam nulla porttitor massa id neque aliquam. Feugiat nibh sed pulvinar proin gravida. Dolor purus non enim praesent elementum. Pharetra convallis posuere morbi leo urna molestie. Vulputate enim nulla aliquet porttitor lacus luctus accumsan tortor posuere.
+A few days ago Github actions beta have been open for anyone that would like to testing out, GitHub Actions makes it easy to automate all your software workflows,
+it enables you to create CI/CD pipelines to Build, test, and deploy your code right from GitHub, having this public beta opened I could not pass the opportunity of testing it out.
+I will create a guessing game application using SpringBoot Webflux, the application should store the game information using a guava cache,
+Our Github pipeline should do the following:
+1) Once a PR is open run integration test cases automatically.
+2) Once a PR is merge into master also run the test cases from #1 but additionally create a Docker image and publish it to a docker hub 
 
-> Iceland, I'm in love with that country, the people are incredible. - Kit Harington
+# Prerequisities
+- Java 8 / maven etc
+- Docker
+        
+# Tech Stack:
+- SpringBoot Webflux
+- Kotlin
+- [Klint](https://ktlint.github.io/)
+- Github Actions
+- [Jib](https://github.com/GoogleContainerTools/jib)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Consectetur adipiscing elit ut aliquam purus sit. Massa placerat duis ultricies lacus sed. Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at. Pulvinar neque laoreet suspendisse interdum consectetur libero. Lacus viverra vitae congue eu consequat ac felis donec et. Imperdiet dui accumsan sit amet nulla facilisi. Faucibus turpis in eu mi bibendum neque. Magna etiam tempor orci eu. Cursus turpis massa tincidunt dui ut ornare. A condimentum vitae sapien pellentesque habitant. Ut porttitor leo a diam sollicitudin tempor id eu.
+# Steps
+### Create a Spring boot sample application
+Let's create the application using [spring boot initilizr](https://start.spring.io/) 
+ - Project: Maven Project
+ - Language Kotlin
+ - SpringBoot: 2.2.0 RC1 
+ - Dependencies: webflux, devtools, actuator, data-r2dbc
+you can also use this [link](https://start.spring.io/#!type=maven-project&language=kotlin&platformVersion=2.2.0.RC1&packaging=jar&jvmVersion=11&groupId=com.odfsoft&artifactId=spring-boot-guess-game&name=spring-boot-guess-game&description=Demo%20project%20for%20Spring%20Boot&packageName=com.odfsoft.spring-boot-guess-game) to have everything pre-fill.
 
-Pulvinar pellentesque habitant morbi tristique senectus et netus et. Suspendisse faucibus interdum posuere lorem ipsum dolor sit amet. Erat nam at lectus urna duis. Lacinia quis vel eros donec ac odio. Eget nulla facilisi etiam dignissim diam quis. Arcu dictum varius duis at consectetur lorem donec massa. Egestas tellus rutrum tellus pellentesque eu. Egestas erat imperdiet sed euismod nisi porta. Nec feugiat in fermentum posuere urna. Viverra ipsum nunc aliquet bibendum enim. Fermentum odio eu feugiat pretium. Vestibulum rhoncus est pellentesque elit. Elit ut aliquam purus sit amet luctus venenatis. Donec ac odio tempor orci dapibus ultrices in. Vitae justo eget magna fermentum. At tellus at urna condimentum mattis pellentesque id nibh tortor. Arcu dictum varius duis at consectetur lorem donec massa. Malesuada proin libero nunc consequat interdum varius sit amet. Dui accumsan sit amet nulla facilisi. Ut venenatis tellus in metus vulputate.
+- lets add some features to the empty spring boot repo, the api should:
+```kotlin
+some sample code here
+```
+- Create a game, which generate a random number and store's it in session.
+
+Request:
+```shell script
+curl -X POST http://localhost:8080/api/games
+```
+response:
+```json
+{
+    "id": "7e37b1ec-e40c-425a-9757-abf8a57ffb91",
+    "guess": 461
+}
+```
+- Get a game with the id returned in the previous request.
+
+Request:
+```shell script
+curl -X GET http://localhost:8080/api/game/7e37b1ec-e40c-425a-9757-abf8a57ffb91
+```
+Response:
+```json
+{
+    "id": "7e37b1ec-e40c-425a-9757-abf8a57ffb91",
+    "guess": 461
+}
+```
+- receive guesses, the api will response with a 200 and message text either saying too low, too high, congratulations you guessed.
+
+Request:
+```shell script
+curl -X POST  http://localhost:8080/api/game/7e37b1ec-e40c-425a-9757-abf8a57ffb91/guess   -H 'Content-Type: application/json'  -d '{"guessNumber": 10}'
+```
+Response:
+```json
+{
+    "message": "your guess is too low"
+}
+```
+TODO: create a step by step guide to the previous setup.
+## Dockerize the application using Jib
+the project will use [Jib](https://github.com/GoogleContainerTools/jib) for dockerization, hence no Dockerfile, 
+Use `./mvnw compile jib:dockerBuild` to build to a local Docker daemon, this command should create a docker image with the name `guess-game`.
+lets run the docker container locally: ` docker container run --name guess-game -p 8080:8080 -d guess-game`
+if you try the calls on the previous step they should still work: 
+Request:
+
+```shell script
+curl -X POST http://localhost:8080/api/games
+```
+response:
+```json
+{
+    "id": "7e37b1ec-e40c-425a-9757-abf8a57ffb91",
+    "guess": 461
+}
+```
+### Automate the test phase using github actions
+ lets make github actions run the test cases as part of the pipeline
+the idea is to run all the test cases when we push to a branch, and to build and deploy when we merge into master
+ - [pull request job](https://github.com/odfsoft/spring-boot-guess-game/blob/master/.github/workflows/pullrequest.yml)
+ 
+### Automate the Docker push to a docker hub using github actions
+ - [merge job](https://github.com/odfsoft/spring-boot-guess-game/blob/master/.github/workflows/merge.yml)
