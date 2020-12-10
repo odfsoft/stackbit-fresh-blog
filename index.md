@@ -9,7 +9,7 @@ sections:
     type: contentblock
     title: About
     content: >-
-        I'm a Software Engineer and Tech Lead who has been working at N26 for the past 3 years. His main focus is mentoring team members, building backend microservices in cross-functional teams, design systems, and engineering processes that perform at scale. In my free time, I also enjoy volunteering for a non-profit organization where I teach children how to code.
+        Tech Lead and Software Engineer with 14 years of experience in large scale enterprise applications, building projects from inception till implementation; Ability to comprehend complex business and technical challenges with ease to articulate the solution effectively to stakeholders; Extensive experience in software architecture, as well as in designing, developing, testing and implementing solutions using Java or Kotlin. International experience and exposure to diverse technologies, cultures, and business operations. Team player with strong leadership, communication, and analytical skills. Decisive, solution-focused, and results.
     actions:
       - label: Contact Me
         url: /contact
