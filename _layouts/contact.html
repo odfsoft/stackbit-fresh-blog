@@ -21,7 +21,7 @@ layout: body
   <div class="post-content">
     {{ content }}
     <form name="contactForm" method="POST" netlify-honeypot="bot-field" data-netlify="true" id="contact-form"
-      class="contact-form">
+      class="contact-form" action="https://formspree.io/f/meqpnqqj">
       <p class="screen-reader-text">
         <label>Don't fill this out if you're human: <input name="bot-field" /></label>
       </p>
@@ -31,7 +31,7 @@ layout: body
       </p>
       <p class="form-row">
         <label class="form-label">Email *</label>
-        <input type="email" name="email" placeholder="Your email address..." class="form-input">
+        <input type="email" name="_replyto" placeholder="Your email address..." class="form-input">
       </p>
       <p class="form-row">
         <label class="form-label">Message *</label>
