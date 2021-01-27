@@ -6,6 +6,13 @@ collections:
     permalink: '/posts/:title/'
 layout_style: overflow
 palette: blue
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    default_lang: html
+    css_class: 'highlight'
 header:
   title: Folger's Blog
   tagline: Blog
