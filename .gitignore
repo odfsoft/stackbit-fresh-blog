@@ -10,3 +10,4 @@ vendor
 .iml
 .vscode
 gradle
+node_modules
