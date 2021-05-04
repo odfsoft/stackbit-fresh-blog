@@ -27,6 +27,9 @@ therefore its recommended not to be used in production environments.
 - Maven
 - Docker
 
+## Source code
+Full repo can be found [here](https://github.com/odfsoft/kotlin-spring-boot-native)
+
 ## Steps:
 
 ### Generate Spring boot project
